@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pt
+*.pth
+*.onnx
+*.log
+.env
+data/
+runs/
+.vscode/
+.ipynb_checkpoints/
