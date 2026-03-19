@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Python 调试程序: 当前文件",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "--samples_dir", "/home/sente/das_ai_project/data/train/processed_data",
+                "--metadata", "/home/sente/das_ai_project/data/train/processed_data/metadata.csv",
+                "--checkpoint_dir", "/home/sente/das_ai_project/checkpoints",
+                "--epochs", "30",
+                "--batch_size", "32"
+            ]
+        }
+    ]
+}
