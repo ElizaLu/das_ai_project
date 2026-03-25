@@ -16,11 +16,11 @@ class DASWindowDataset(Dataset):
     """
     Expects:
       - samples_dir containing .npy files (time x channel)
-      - metadata.csv with columns: filename,...,label_channel,event_class
+      - metadata.csv with columns: filename,...,label_channel,has_event
     Returns:
       - x: torch.FloatTensor (1, T, C)
       - label: int (0/1)
-      - heatmap: torch.FloatTensor (C,)  (if event_class==1 else zeros)
+      - heatmap: torch.FloatTensor (C,)  (if has_event==1 else zeros)
     """
     def __init__(self, samples_dir, metadata_csv, time_normalize=True, hm_sigma=0.5):
         self.samples_dir = samples_dir
@@ -45,19 +45,19 @@ class DASWindowDataset(Dataset):
             x = (x - x.mean()) / (x.std() + 1e-8)
         # to tensor shape (1, T, C)
         x = torch.from_numpy(x.astype(np.float32)).unsqueeze(0)
-        event_class = int(row.get('event_class', '0') or 0)
+        has_event = int(row.get('has_event', '0') or 0)
         label_channel = row.get('label_channel', '')
         C = x.shape[2]
-        if event_class and label_channel not in ('', None):
+        if has_event and label_channel not in ('', None):
             try:
                 ch_idx = int(label_channel)
             except:
                 ch_idx = None
         else:
             ch_idx = None
-        if event_class and ch_idx is not None:
+        if has_event and ch_idx is not None:
             heatmap = make_gaussian_heatmap(ch_idx, C, sigma=self.hm_sigma)
         else:
             heatmap = np.zeros(C, dtype=np.float32)
         heatmap = torch.from_numpy(heatmap)
-        return x, torch.tensor([event_class], dtype=torch.float32), heatmap
+        return x, torch.tensor([has_event], dtype=torch.float32), heatmap

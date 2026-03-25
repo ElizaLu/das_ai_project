@@ -1,0 +1,4 @@
+1、事件类别         data_path=zuanwang
+2、采样通道         channel=81
+3、振动强度         intensity=2
+4、采集环境       法尔胜室外环境，1级风，在钢绳段从左往右第八片钻网

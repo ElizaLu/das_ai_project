@@ -8,6 +8,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
+            "python": "/home/sente/anaconda3/envs/pytorch_env/bin/python",
             "args": [
                 "--data_root", "/home/sente/das_ai_project/data/train/data",
                 "--label_root", "/home/sente/das_ai_project/data/train/label",

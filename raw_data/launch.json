@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "DAS 数据重组脚本",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${/home/sente/das_ai_project/raw_data/reorganize_data.py",
+            "console": "integratedTerminal",
+            "python": "/home/sente/anaconda3/envs/pytorch_env/bin/python",
+            "args": [
+                "--src", "/home/sente/das_ai_project/raw_data/DAS_data",
+                "--dst", "/home/sente/das_ai_project/raw_data/DAS_data_reorganized",
+                "--mode", "copy"
+            ]
+        }
+    ]
+}

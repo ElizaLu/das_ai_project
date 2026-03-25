@@ -77,6 +77,8 @@ def detect_event_intervals(combined, fs, channel_hint=None, win_len=256, thr_mul
     channel_hint：事件发生通道
     """
     ch, total = combined.shape
+    if channel_hint is None:
+        return []
     c = int(channel_hint)
     
     # compute envelope (avg RMS)
@@ -105,15 +107,43 @@ def detect_event_intervals(combined, fs, channel_hint=None, win_len=256, thr_mul
 def _intervals_overlap(t0, t1, a, b):
     return not (t1 < a or t0 > b)
 
+def _clip_interval_to_window(t0, t1, win_start, win_end):
+    """
+    把 session 级区间裁剪到 window 内。
+    返回 window 相对坐标区间 (a, b)，如果没有重叠则返回 None
+    """
+    a = max(t0, win_start)
+    b = min(t1, win_end)
+    if a > b:
+        return None
+    return int(a - win_start), int(b - win_start)
+
+def choose_window_class(window_events):
+    """
+    一个窗口里如果有多个事件，这里选“主类”作为窗口级三分类标签，没有事件返回0。
+    规则：按事件持续时间累计，谁最长就选谁。
+    """
+    if not window_events:
+        return 0
+
+    score = {}
+    for ev in window_events:
+        cid = int(ev["class_id"])
+        dur = max(1, int(ev["t1"]) - int(ev["t0"]) + 1)
+        score[cid] = score.get(cid, 0) + dur
+
+    return max(score.items(), key=lambda x: x[1])[0]
+
 def save_windows_and_metadata(combined_arr, out_dir, class_name, session_folder,
                               window_len, hop, label_parsed, meta_writer,
+                              class_id,
                               fs=1000.0,
                               detector_win_len=256,
                               detector_thr_mul=2.5,
                               detector_min_samples=5):
     """
     Save sliding windows and write metadata:
-    metadata columns will include: filename,class,session,start,end,label_class,label_channel,label_intensity,label_env,has_event
+    metadata columns will include: filename,class_name,class_id,session,start,end,label_class,label_channel,label_intensity,label_env,has_event
     has_event = 1 if window overlaps estimated time interval, else 0
     """
     ch, total = combined_arr.shape
