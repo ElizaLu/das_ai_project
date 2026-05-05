@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "DAS AI 训练调试",
+            "type": "python",
+            "request": "launch",
+            "program": "/home/sente/das_ai_project/src/train.py",
+            "console": "integratedTerminal",
+            "python": "/home/sente/anaconda3/envs/pytorch_env/bin/python",
+            "args": [
+                "--data-root", "/home/sente/das_ai_project/data/train/processed_data",
+                "--train-manifest", "/home/sente/das_ai_project/data/train/processed_data/manifest.csv",
+                "--val-manifest", "/home/sente/das_ai_project/data/train/processed_data/manifest.csv",
+                "--epochs", "30",
+                "--auto-batch-size",
+                "--lr", "0.001",
+                "--num-workers", "1",
+                "--save-dir", "runs/dasmil_exp",
+                "--export-netron",
+                // 如需恢复 resume，取消下面注释
+                "--resume", "/home/sente/runs/dasmil_exp/checkpoints/last.pth"
+            ],
+            "redirectOutput": true,
+            "logToFile": true,
+            "logFilePath": "/home/sente/das_ai_project/log.txt"
+        }
+    ]
+}

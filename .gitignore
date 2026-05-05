@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pt
+*.pth
+*.onnx
+*.log
+.env
+data/
+checkpoints/
+raw_data/
+runs/
+.vscode/
+.ipynb_checkpoints/
